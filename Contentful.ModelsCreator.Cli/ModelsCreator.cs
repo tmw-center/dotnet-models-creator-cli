@@ -21,9 +21,9 @@ namespace Contentful.ModelsCreator.Cli
     [HelpOption]
     public class ModelsCreator
     {
-        [Option(CommandOptionType.SingleValue, Description = "The Contentful API key for the Content Delivery API")]
-        [Required(ErrorMessage = "You must specify the Contentful API key for the Content Delivery API")]
-        public string ApiKey { get; set; }
+        [Option(CommandOptionType.SingleValue, Description = "The Contentful management token")]
+        [Required(ErrorMessage = "You must specify the Contentful management token")]
+        public string ManagementToken { get; set; }
         [Option(CommandOptionType.SingleValue, Description = "The space id to fetch content types from")]
         [Required(ErrorMessage = "You must specify the space id to fetch content types from.")]
         public string SpaceId { get; set; }
@@ -39,7 +39,7 @@ namespace Contentful.ModelsCreator.Cli
         [Option(CommandOptionType.SingleValue, Description = "Path to the file or directory to create files in")]
         public string Path { get; }
 
-        [VersionOption("0.9.2")]
+        [VersionOption("0.10.0")]
         public bool Version { get; }
 
         private string _templateStart = @"// THIS FILE WAS AUTOMATICALLY GENERATED. DO NOT EDIT.
@@ -58,13 +58,12 @@ using Contentful.Core.Models;
         {
 
             var http = new HttpClient();
-            var options = new ContentfulOptions
+            var client = new ContentfulManagementClient(http, new ContentfulOptions
             {
-                DeliveryApiKey = ApiKey,
+                ManagementApiKey = ManagementToken,
                 SpaceId = SpaceId,
                 Environment = Environment
-            };
-            var client = new ContentfulClient(http, options);
+            });
 
             try
             {
