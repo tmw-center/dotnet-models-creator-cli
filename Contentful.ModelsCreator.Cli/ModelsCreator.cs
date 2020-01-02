@@ -42,7 +42,9 @@ namespace Contentful.ModelsCreator.Cli
         [VersionOption("0.9.1")]
         public bool Version { get; }
 
-        private string _templateStart = @"using System;
+        private string _templateStart = @"// THIS FILE WAS AUTOMATICALLY GENERATED. DO NOT EDIT.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
