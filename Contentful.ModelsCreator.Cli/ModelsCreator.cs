@@ -39,7 +39,7 @@ namespace Contentful.ModelsCreator.Cli
         [Option(CommandOptionType.SingleValue, Description = "Path to the file or directory to create files in")]
         public string Path { get; }
 
-        [VersionOption("0.10.0")]
+        [VersionOption("0.11.0")]
         public bool Version { get; }
 
         private string _templateStart = @"// THIS FILE WAS AUTOMATICALLY GENERATED. DO NOT EDIT.
@@ -103,7 +103,7 @@ using Contentful.Core.Models;
 
             foreach (var contentType in _contentTypes)
             {
-                var safeFileName = GetSafeFilename(contentType.Name);
+                var safeFileName = GetSafeFilename(contentType.SystemProperties.Id);
 
                 var file = new FileInfo($"{dir.FullName}{System.IO.Path.DirectorySeparatorChar}{safeFileName}.cs");
                 if (file.Exists && !Force)
@@ -127,7 +127,7 @@ using Contentful.Core.Models;
                     //start namespace
                     sb.AppendLine("{");
 
-                    sb.AppendLine($"    public class {FormatClassName(contentType.Name)}");
+                    sb.AppendLine($"    public class {FormatClassName(contentType.SystemProperties.Id)}");
                     //start class
                     sb.AppendLine("    {");
 
@@ -243,7 +243,7 @@ using Contentful.Core.Models;
                 return "object";
             }
 
-            return FormatClassName(contentType.Name);
+            return FormatClassName(contentType.SystemProperties.Id);
         }
 
         private string GetDataTypeForListField(Field field)
